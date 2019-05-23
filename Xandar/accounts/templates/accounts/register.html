@@ -3,89 +3,102 @@
 
 {% block content %}
 
+   <!-- Start Banner Area -->
+   <section class="banner-area organic-breadcrumb">
+      <div class="container">
+         <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+            <div class="col-first">
+               <h1>Register New User</h1>
+               <nav class="d-flex align-items-center">
+                  <a href="#">Home<span class="lnr lnr-arrow-right"></span></a>
+                  <a href="{% url 'accounts:registration' %}">Register New User</a>
+               </nav>
+            </div>
+         </div>
+      </div>
+   </section>
+   <!-- End Banner Area -->
+
+   <!--================Login Box Area =================-->
+   <section class="login_box_area section_gap">
+      <center>
+         <div class="col-lg-6">
+               <div class="login_form_inner" style="margin-top:0px">
+                  <h2>Registration Form</h2><br>
+                           {% include 'accounts/messages.html' %}
+                  <form class="row login_form" method="POST" id="contactForm">
+                     {% csrf_token %}
+                     <span class="col-md-12 form-group" style="color:red;">* Fields are mandatory</span>
+                     <div class="col-md-12 form-group">
+                        <input type="text" class="form-control is-valid" id="fn" name="first_name"
+                              placeholder="First Name *" onfocus="this.placeholder = ''"
+                              onblur="this.placeholder = 'First Name'" pattern="^[a-zA-Z\s]+$"
+                              maxlength="30" required>
+                     </div>
+                     <div class="col-md-12 form-group">
+                        <input type="text" class="form-control is-valid" id="ln" name="last_name"
+                              placeholder="Last Name" onfocus="this.placeholder = ''"
+                              onblur="this.placeholder = 'Last Name'" pattern="^[a-zA-Z\s]+$"
+                              maxlength="20">
+                     </div>
+                     <div class="col-md-12 form-group">
+                        <input type="email" class="form-control is-valid" id="name" name="email"
+                              placeholder="E-mail *" onfocus="this.placeholder = ''"
+                              onblur="this.placeholder = 'E-mail'" maxlength="50" required
+                              data-validation="email" data-validation-error-msg="Enter a valid e-mail. Eg: abc@gmail.com">
+                     </div>
+                     <div class="col-md-12 form-group">
+                        <input type="Password" class="form-control is-valid" id="txtPassword" name="password1"
+                              placeholder="Password *" onfocus="this.placeholder = ''"
+                              onblur="this.placeholder = 'Password'" data-validation="strength"
+                              data-validation-strength="2"
+                              data-validation-help="* Password must have a Number, Alphabet and 8 letters atleast"
+                              maxlength="15" required>
+                        <span id="result"></span>
+                     </div>
+                     <div class="col-md-12 form-group">
+                        <input type="Password" class="form-control is-valid" id="txtConfirmPassword"
+                              name="password2" placeholder="Confirm Password *" onfocus="this.placeholder = ''"
+                              data-validation="confirmation"
+                              onblur="this.placeholder = 'Confirm Password'" maxlength="15" required>
+                     </div>
+                     <div class="col-md-12 is-valid" align="left">
+                        <br><input type="radio" name="gender" value="True" checked> Male
+                        <input style="margin-left:150px;" type="radio" name="gender" value="False"> Female<br><br>
+                     </div>
+                     <div class="col-md-12 form-group">
+                        <input type="text" class="form-control is-valid" id="name" name="phone_number"
+                              placeholder="Phone Number *" onfocus="this.placeholder = ''"
+                              onblur="this.placeholder = 'Phone Number'" pattern="[789][0-9]{9}"
+                              data-validation-help="Number should start with 7,8 or 9"
+                              maxlength="10" required>
+                     </div>
+                     <div class="col-md-12 form-group is-valid">
+                        <button type="submit" id="btnSubmit" value="submit"
+                              class="primary-btn">Register</button>
+                     </div>
+                  </form>
+                  <div>
+                     Already A User?? <a href="{% url 'accounts:login_app' %}">Sign In</a>
+                  </div><br>
+
+               </div>
+            </div>
+      </center>
+
+   </section>
+   <!--================End Login Box Area =================-->
 
 
-	<!-- Start Banner Area -->
-	<section class="banner-area organic-breadcrumb">
-		<div class="container">
-			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-				<div class="col-first">
-					<h1>Register New User</h1>
-					<nav class="d-flex align-items-center">
-						<a href="{% static 'index' %}">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a href="#">Register New User</a>
-					</nav>
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End Banner Area -->
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
 
-	<!--================Login Box Area =================-->
-	<section class="login_box_area section_gap">
-		<center>
-			<div class="col-lg-6">
-					<div class="login_form_inner" style="margin-top:0px">
-						<h2>Registration Form</h2><br>
-									{% include 'accounts/messages.html' %}
-						<form class="row login_form" method="POST" id="contactForm">
-							{% csrf_token %}
-							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="fn" name="first_name" placeholder="First Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'First Name'" pattern="[a-zA-Z]+" maxlength="20" required>
-							</div>
-							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="ln" name="last_name" placeholder="Last Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Last Name'" pattern="[a-zA-Z]+" maxlength="20">
-							</div>
-							<div class="col-md-12 form-group">
-								<input type="email" class="form-control" id="name" name="email" placeholder="E-mail" onfocus="this.placeholder = ''" onblur="this.placeholder = 'E-mail'" maxlength="50" required  data-validation="email" data-validation-help="">
-							</div>
-							<div class="col-md-12 form-group">
-								<input type="Password" class="form-control" id="name" name="password1" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" maxlength="15">
-								<br><div class="form-group" align="center" style="font-size: 12px;">* Password must have a Number, Alphabet and 8 letters at least</div>
-							</div>
-							<div class="col-md-12 form-group">
-								<input type="Password" class="form-control" id="name" name="password2" placeholder="Confirm Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Confirm Password'" maxlength="15">
-							</div>
-							<div class="col-md-12 form-group">
-								<select name="gender" required>
-									<option selected="selected" value='True'>Male</option>
-									<option value='False'>Female</option>
-								</select>
-							</div>
-							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="phone_number" placeholder="Phone Number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone Number'" pattern="[789][0-9]{9}" maxlength="10" required>
-							</div>
-							<div class="col-md-12 form-group">
-								<button type="submit" value="submit" class="primary-btn">Register</button>
-							</div>
-						</form>
-						<div>
-							Already A User?? <a href="{% url 'accounts:login_app' %}">Sign In</a>
-						</div><br>
-						
-					</div>
-				</div>
-		</center>
-		
-	</section>
-	<!--================End Login Box Area =================-->
+   <script>
+      $.validate();
+      $('#my-textarea').restrictLength( $('#max-length-element') );
+   </script>
 
-
-
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
-	<script>
-  		$.validate();
-  		$('#my-textarea').restrictLength( $('#max-length-element') );
-	</script>
-	<script>
-		$.validate({
-			modules : 'security'
-		 });
-	</script>
-
-
-{% endblock content %}
+{% endblock %}
 {% block scroll_js %}
 <script type="text/javascript">
     $("html,body").scrollTop(400);

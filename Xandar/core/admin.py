@@ -1,7 +1,7 @@
 from django.contrib import admin
 #from core.models import Customer, Attribute, Product, ExtraAttribute, ProductImage
 from core.models import *
-
+from django.contrib.auth.admin import UserAdmin
 
 class ProductImageInline(admin.StackedInline):
     model = ProductImage
@@ -35,9 +35,9 @@ class ProductAdmin(admin.ModelAdmin):
         ProductImageInline, AttributeInline, ExtraAttributeInline
     ]
 
-class CustomerAdmin(admin.ModelAdmin):
-    fields = ('username','first_name','last_name','email','password','last_login', 'phone_number')
-    list_display = ('first_name', 'last_name', 'username')
+class CustomerAdmin(UserAdmin):
+    #fields = ('username','first_name','last_name','email','last_login', 'phone_number')
+    list_display = ('first_name', 'last_name', 'username','email')
     list_filter = ('first_name','email')
     search_fields = ['first_name','email','username']
 

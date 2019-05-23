@@ -34,7 +34,7 @@ def user_register(request):
                 form.instance.username = username
                 form.save()
 
-                messages.success(request, 'You are now registered')
+                # messages.success(request, 'You are now registered')
 
                 html_content = render_to_string('accounts/email_confirmation.html')
 
@@ -45,18 +45,16 @@ def user_register(request):
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
 
-                return redirect('accounts:loginapp')
+                return render(request, 'accounts/login.html', context={'message': "Registered Successfully. Now Log in"})
 
         else:
-            errors = form.errors
-            messages.error(request, 'Password not valid or is too common.')
-            return redirect('accounts:registration')
+            return HttpResponse(form.errors)
+            # messages.error(request, 'Password not valid or is too common.')
+            # return redirect('accounts:registration')
     else:
         form = UserRegisterForm()
 
     return render(request, 'accounts/register.html')
-
-
 
 
 
