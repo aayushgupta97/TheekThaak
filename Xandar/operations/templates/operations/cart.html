@@ -70,7 +70,7 @@
                                 <td>
                                     <div class="media">
                                         <div class="d-flex">
-                                         <a href="#">
+                                         <a href="{% url 'products:product_detail' item.product.id %} ">
                                         <img src="{{item.product_img.image.url}}" width="80px"
                                         height="80px">
                                         </a>
@@ -89,12 +89,25 @@
 
                                 <td style="white-space:nowrap;">
 
-                                    {{item.quantity}}
-                                   <form action="{% url 'operations:update_cart' item.product.id %}" method="POST">
-                                        {% csrf_token %}
-                                        {{form.quantity}}
-                                        <input type="submit" value="Update" class="btn btn-info">
-                                    </form>
+                                    <div class="product_count">
+                                        <form action="{% url 'operations:update_cart' item.product.id %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="text" name="qty" id="sst" maxlength="12"
+                                                   value="{{item.quantity}}" title="Quantity:"
+                                                   class="input-text qty">
+                                            <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                                                    class="increase items-count mr-5 pr-5" style="color:red;"
+                                                    type="button"><i class="lnr lnr-chevron-up"></i></button>
+                                            <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                                                    class="reduced items-count mr-5 pr-5" style="color:red;"
+                                                    type="button"><i class="lnr lnr-chevron-down"></i></button>
+
+                                            <input type="submit" value="Update" class="btn btn-info ml-2">
+
+
+                                        </form>
+                                    </div>
+
                                 </td>
                                 <td>
                                     <a href="{% url 'operations:delete_cart' item.product.id %}"><input type="submit" value="Remove" class="btn btn-info"></a>

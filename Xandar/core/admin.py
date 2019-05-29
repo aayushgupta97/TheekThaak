@@ -1,5 +1,5 @@
 from django.contrib import admin
-#from core.models import Customer, Attribute, Product, ExtraAttribute, ProductImage
+#from core.models import Customer, Attribute, Product, ExtraAttribute, ProductImage, Banner
 from core.models import *
 from django.contrib.auth.admin import UserAdmin
 
@@ -44,4 +44,6 @@ class CustomerAdmin(UserAdmin):
 
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Product, ProductAdmin)
+admin.site.register(Banner)
+
 # admin.site.register(ExtraAttribute)

@@ -4,9 +4,17 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 from Xandar.util import unique_slug_generator
-from .views import get_extra_field
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+
+
+def get_extra_field(table, extra_attributes):
+
+    fields = table.objects.all().values_list('attribute', flat=True)
+    extra_fields = [value for value in fields]
+    extra_attributes.append(('Other', tuple([(i, i) for i in extra_fields])))
+    return extra_attributes
+
 
 ATTRIBUTE_CHOICES = [
     ('T-Shirts',
@@ -43,6 +51,7 @@ SUB_CATEGORY_CHOICES = (
     ('T-Shirts', 'T-Shirts'),
     ('Glasses', 'Glasses'),
     ('Shoes', 'Shoes'),
+    ('Phone','Phone')
 )
 
 
@@ -67,6 +76,7 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=10)
     replacement = models.IntegerField()
+    is_featured = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -157,5 +167,14 @@ class Items(models.Model):
         return self.product.name
 
 
+class Banner(models.Model):
+    title = models.CharField(max_length=50, blank=True)
+    category = models.CharField(choices=CATEGORY_CHOICES, max_length=20)
+    sub_category = models.CharField(choices=SUB_CATEGORY_CHOICES, max_length=20, blank=True)
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=10, blank=True)
+    is_active = models.BooleanField(default=False)
+    image = models.FileField(upload_to='banner_images/', blank=False)
 
+    def __str__(self):
+        return self.title
 

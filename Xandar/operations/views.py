@@ -43,13 +43,18 @@ def add_wishlist_item(request, pk):
         return 'Login To Save This to your Wishlist'
 
 
-
-
+@login_required
+def add_wishlist_to_cart(request, product_id):
+    add_to_cart(request,product_id)
+    delete_wishlist_items(request,product_id)
+    return HttpResponse(list_wishlist_items(request))
 
 @login_required
 def delete_wishlist_items(request, pk):
     try:
         user = Customer.objects.get(email=request.user.email)
+        delete_item = Wishlist.objects.get(product_id=pk)
+        delete_item.delete()
         items = Wishlist.objects.filter(customer=request.user)
         context = {'items': items}
         # import pdb; pdb.set_trace()
@@ -68,8 +73,8 @@ def show_orders(request):
     return render(request, 'operations/orders.html')
 
 
-def show_address(request):
-    return render(request, 'operations/address.html')
+# def show_address(request):
+#     return render(request, 'operations/address.html')
 
 
 def track_order(request):
@@ -160,7 +165,7 @@ def add_to_cart(request, product_id, quantity=1):
 
 def get_cart(request):
     errors = ""
-    form = UpdateCartForm()
+
     if request.user.is_authenticated:
 
         '''Code to add the anonymous cart items to the logged in user'''
@@ -208,51 +213,51 @@ def get_cart(request):
         total_price = sum(Decimal(item['unit_price']) * item['quantity'] for item in
                           request.session[settings.CART_SESSION_ID].values())
     return render(request, 'operations/cart.html',
-                  {'items': items, 'total_price': total_price, 'form': form, 'errors': errors})
+                  {'items': items, 'total_price': total_price, 'errors': errors})
 
 
 def update_cart(request, product_id):
     errors = " "
-    form = UpdateCartForm()
     if request.method == "POST":
-        form = UpdateCartForm(request.POST)
-        if form.is_valid():
+
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            messages.error(request, "You are updating product that does not exist !!!")
+
+        if request.user.is_authenticated:
             try:
-                product = Product.objects.get(id=product_id)
-            except Product.DoesNotExist:
-                messages.error(request, "You are updating product that does not exist !!!")
+                cart = Cart.objects.get(user=request.user, is_ordered=False)
+            except Cart.DoesNotExist:
+                messages.error(request, "You don't have anything in cart")
+                return render(request, 'operations/cart.html', {'errors': errors})
 
-            if request.user.is_authenticated:
-                try:
-                    cart = Cart.objects.get(user=request.user, is_ordered=False)
-                except Cart.DoesNotExist:
-                    messages.error(request, "You don't have anything in cart")
-                    return render(request, 'operations/cart.html', {'errors': errors})
+            items = Items.objects.filter(cart=cart, product=product)[0]
+            quantity = request.POST.get("qty")
+            quantity = int(quantity)
 
-                items = Items.objects.filter(cart=cart, product=product)[0]
-                quantity = form.cleaned_data['quantity']
-                quantity = int(quantity)
+            if quantity <= product.quantity:
 
-                if quantity <= product.quantity:
+                if quantity <= 3:
                     items.quantity = quantity
                     items.save()
-                else:
-                    messages.error(request, "You have reached the limit !!")
-
             else:
-                product_id = str(product_id)
-                quantity = form.cleaned_data['quantity']
-                quantity = int(quantity)
-                if quantity <= product.quantity:
+                messages.error(request, "You have reached the limit !!")
+
+        else:
+            product_id = str(product_id)
+            quantity = request.POST.get("qty")
+            quantity = int(quantity)
+            if quantity <= product.quantity:
+                if quantity <= 3:
                     request.session[settings.CART_SESSION_ID][product_id]['quantity'] = quantity
                     request.session.modified = True
-                else:
-                    messages.error("You have reached the limit !!")
+            else:
+                messages.error("You have reached the limit !!")
 
-            return redirect('operations:view_cart')
+        return redirect('operations:view_cart')
 
-    return render(request, 'operations/cart.html',
-                  {'form': form})
+    return render(request, 'operations/cart.html')
 
 
 def delete_cart(request, product_id):
