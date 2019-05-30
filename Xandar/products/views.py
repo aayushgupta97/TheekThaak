@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
-from core.models import Product, ProductImage, Attribute, ExtraAttribute
+from core.models import Product, ProductImage, Attribute, ExtraAttribute, GENDER_CHOICES, CATEGORY_CHOICES, SUB_CATEGORY_CHOICES
 from django.db.models import Q
 
 
@@ -11,17 +11,41 @@ from django.db.models import Q
 class ProductListView(ListView):
 	model = Product
 	template_name = "products/product_list.html"
-	paginate_by = 3
+	# paginate_by = 3
 
 
 	def get_queryset(self, *args, **kwargs):
 		qs = Product.objects.all()
 		query = self.request.GET.get("category", None)
+		query2 = self.request.GET.get("sub_category", None)
+		query3 = self.request.GET.get("gender", None)
+		query4 = self.request.GET.get("price", None)
+		query5 = self.request.GET.get("description", None)
+
 		if query is not None:
-			qs = qs.filter(Q(category__icontains=query) |
-    			Q(sub_category__icontains=query)
+			qs = qs.filter(
+				Q(category__icontains=query) 
     			)
 
+		if query2 is not None:
+			qs = qs.filter(
+    			Q(sub_category__icontains=query2)
+    			)
+
+		if query3 is not None:
+			qs = qs.filter(
+				Q(gender__iexact=query3)
+			)
+		
+		if query4 is not None:
+			qs = qs.filter(
+				Q(price__lte=query4)
+			)
+
+		if query5 is not None:
+			qs = qs.filter(
+				Q(description__icontains=query5)
+			)
 		return qs
 
 
@@ -29,6 +53,11 @@ class ProductListView(ListView):
         # Call the base implementation first to get a context
 		context = super().get_context_data(**kwargs)
 		context['image']=[]
+		context['values'] = self.request.GET
+		context['genders'] = GENDER_CHOICES
+		context['categories'] = CATEGORY_CHOICES
+		context['sub_categories'] = SUB_CATEGORY_CHOICES
+
 
         # Add in a QuerySet of all the books
 		# for object in context['object_list']:
@@ -43,15 +72,6 @@ class ProductListView(ListView):
 
 
 		# [{a,b,c,d},{a,b,c},{a,b,c}]
-
-
-
-
-
-
-
-
-
 
 
 

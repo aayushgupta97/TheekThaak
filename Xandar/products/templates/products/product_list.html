@@ -3,22 +3,66 @@
 {% block content %}
 
 
+
+
 	<!-- Start Banner Area -->
 	<section class="banner-area organic-breadcrumb">
-		<div class="container">
-			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-				<div class="col-first">
-					<h1>Shop Category page</h1>
-					<nav class="d-flex align-items-center">
-						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a href="#">Shop<span class="lnr lnr-arrow-right"></span></a>
-						<a href="category.html">Fashion Category</a>
-					</nav>
-				</div>
-			</div>
-		</div>
-	</section>
+
+<section id="showcase-inner" class="showcase-search text-white py-5">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md-12">
+          <form action="{% url 'product_list' %}">
+            <!-- Form Row 1 -->
+            <div class="form-row">
+              <div class="col-md-6  mt-5">
+                <label class="sr-only">Keywords</label>
+                <input  type="text" name="description" class="form-control" placeholder="Keyword (Shoe, jeans, etc)" value="{{ values.description }}">
+              </div>
+
+              <div class="col-md-2 ml-2 mt-5">
+                <label class="sr-only">Gender</label>
+				<select name="gender" class="form-control">
+                  <option selected="true" disabled="disabled" >Gender (Any)</option>
+				  {% for gender in genders %}
+ 					<option value="{{ gender.0 }}"
+				  {% if gender.0 == values.gender %}
+					selected {%endif%}
+					 >{{ gender.1 }}</option>
+				
+				  {% endfor %}
+                 
+                </select>
+              </div>
+
+               <div class="col-md-2 ml-2  mt-5 " >
+                <select name="price" class="form-control" >
+                  <option selected="true" disabled="disabled">Price (All)</option>
+                  <option>1000</option>
+                  <option>10000</option>                  
+				  <option>50000</option>
+                </select>
+              </div>
+            <button class="btn mt-5 ml-3 text-white" type="submit" style="background-color:#828bb3;"> <i class="fa fa-search" aria-hidden="true"></i> Search</button>
+
+            </div>
+          
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</section>
+
+
 	<!-- End Banner Area -->
+{% for g in gender %}
+
+{{ g.0 }} 
+{% endfor %}	
+
+
 	<div class="container">
 		<div class="row">
 			<div class="col-xl-3 col-lg-4 col-md-5">
